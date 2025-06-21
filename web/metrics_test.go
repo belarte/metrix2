@@ -29,35 +29,10 @@ func (mp *MetricsPage) GetDescriptionValue() (string, error) {
 }
 
 func TestSelectMetricShowsFields(t *testing.T) {
-	cmd, err := startServer()
-	if err != nil {
-		t.Fatalf("failed to start server: %v", err)
-	}
-	defer stopServer(cmd)
+	env := setupTestEnv(t, "http://localhost:8080/metrics")
+	defer env.teardown()
 
-	pw, err := playwright.Run()
-	if err != nil {
-		t.Fatalf("could not launch playwright: %v", err)
-	}
-	defer pw.Stop()
-
-	browser, err := pw.Chromium.Launch()
-	if err != nil {
-		t.Fatalf("could not launch browser: %v", err)
-	}
-	page, err := browser.NewPage()
-	if err != nil {
-		t.Fatalf("could not create page: %v", err)
-	}
-
-	page.SetDefaultTimeout(3000) // Set Playwright timeout to 3 seconds
-
-	_, err = page.Goto("http://localhost:8080/metrics")
-	if err != nil {
-		t.Fatalf("could not goto metrics page: %v", err)
-	}
-
-	metricsPage := &MetricsPage{page: page}
+	metricsPage := &MetricsPage{page: env.page}
 
 	// No selection, just check the default/pre-selected metric fields
 	title, err := metricsPage.GetTitleValue()
