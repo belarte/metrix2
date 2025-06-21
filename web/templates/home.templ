@@ -1,16 +1,8 @@
 package templates
 
 templ HomePage() {
-  <html>
-    <head>
-      <title>Metrix2</title>
-      <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@2.0.6/css/pico.min.css">
-    </head>
-    <body>
-      <main class="container">
-        <h1>Metrix2</h1>
-        <p>Welcome to Metrix2! Track your metrics with ease.</p>
-      </main>
-    </body>
-  </html>
+  @Layout() {
+    <h1>Metrix2</h1>
+    <p>Welcome to Metrix2! Track your metrics with ease.</p>
+  }
 }

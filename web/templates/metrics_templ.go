@@ -30,7 +30,25 @@ func MetricsPage() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<html><head><title>Manage Metrics</title><link rel=\"stylesheet\" href=\"https://unpkg.com/@picocss/pico@2.0.6/css/pico.min.css\"></head><body><main class=\"container\"><form><label for=\"metric-select\">Select metric:</label> <select id=\"metric-select\" name=\"metric\"><option value=\"weight\" selected>Weight</option> <option value=\"temperature\">Temperature</option> <option value=\"distance\">Distance</option></select> <label for=\"metric-title\">Title</label> <input id=\"metric-title\" name=\"title\" value=\"Weight\"> <label for=\"metric-unit\">Unit</label> <input id=\"metric-unit\" name=\"unit\" value=\"kg\"> <label for=\"metric-description\">Description</label> <textarea id=\"metric-description\" name=\"description\">Body weight in kilograms</textarea></form></main></body></html>")
+		templ_7745c5c3_Var2 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+			if !templ_7745c5c3_IsBuffer {
+				defer func() {
+					templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+					if templ_7745c5c3_Err == nil {
+						templ_7745c5c3_Err = templ_7745c5c3_BufErr
+					}
+				}()
+			}
+			ctx = templ.InitializeContext(ctx)
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<form><label for=\"metric-select\">Select metric:</label> <select id=\"metric-select\" name=\"metric\"><option value=\"weight\" selected>Weight</option> <option value=\"temperature\">Temperature</option> <option value=\"distance\">Distance</option></select> <label for=\"metric-title\">Title</label> <input id=\"metric-title\" name=\"title\" value=\"Weight\"> <label for=\"metric-unit\">Unit</label> <input id=\"metric-unit\" name=\"unit\" value=\"kg\"> <label for=\"metric-description\">Description</label> <textarea id=\"metric-description\" name=\"description\">Body weight in kilograms</textarea></form>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			return nil
+		})
+		templ_7745c5c3_Err = Layout().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
