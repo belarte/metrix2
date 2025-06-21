@@ -1,31 +1,10 @@
 package web
 
 import (
-	"os/exec"
 	"testing"
-	"time"
 
 	"github.com/playwright-community/playwright-go"
 )
-
-func startServer() (*exec.Cmd, error) {
-	cmd := exec.Command("go", "run", "main.go", "serve")
-	cmd.Stdout = nil
-	cmd.Stderr = nil
-	cmd.Dir = ".." // Run from project root so main.go is found
-	if err := cmd.Start(); err != nil {
-		return nil, err
-	}
-	// Wait for the server to start
-	time.Sleep(2 * time.Second)
-	return cmd, nil
-}
-
-func stopServer(cmd *exec.Cmd) {
-	if cmd != nil {
-		_ = cmd.Process.Kill()
-	}
-}
 
 func TestHomePage(t *testing.T) {
 	cmd, err := startServer()
@@ -48,6 +27,8 @@ func TestHomePage(t *testing.T) {
 	if err != nil {
 		t.Fatalf("could not create page: %v", err)
 	}
+
+	page.SetDefaultTimeout(3000) // Set Playwright timeout to 3 seconds
 
 	_, err = page.Goto("http://localhost:8080")
 	if err != nil {

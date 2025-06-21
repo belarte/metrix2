@@ -14,6 +14,10 @@ var serveCmd = &cobra.Command{
 		http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 			templates.HomePage().Render(r.Context(), w)
 		})
+		// Add a handler for /metrics
+		http.HandleFunc("/metrics", func(w http.ResponseWriter, r *http.Request) {
+			templates.MetricsPage().Render(r.Context(), w)
+		})
 		log.Println("Starting web server on :8080...")
 		log.Fatal(http.ListenAndServe(":8080", nil))
 	},
