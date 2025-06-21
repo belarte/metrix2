@@ -2,7 +2,8 @@ package web
 
 import (
 	"testing"
-	"strings"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestHomePage(t *testing.T) {
@@ -10,18 +11,10 @@ func TestHomePage(t *testing.T) {
 	defer env.teardown()
 
 	title, err := env.page.Title()
-	if err != nil {
-		t.Fatalf("could not get title: %v", err)
-	}
-	if title != "Metrix 2025" {
-		t.Errorf("expected title 'Metrix 2025', got '%s'", title)
-	}
+	require.NoError(t, err, "could not get title")
+	require.Equal(t, "Metrix 2025", title, "expected title 'Metrix 2025'")
 
 	content, err := env.page.Content()
-	if err != nil {
-		t.Fatalf("could not get content: %v", err)
-	}
-	if !strings.Contains(content, "Welcome to Metrix2! Track your metrics with ease.") {
-		t.Errorf("expected welcome message in content")
-	}
+	require.NoError(t, err, "could not get content")
+	require.Contains(t, content, "Welcome to Metrix2! Track your metrics with ease.", "expected welcome message in content")
 }

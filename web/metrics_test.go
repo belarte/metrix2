@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/playwright-community/playwright-go"
+	"github.com/stretchr/testify/require"
 )
 
 // MetricsPage models the metric management page for Playwright tests.
@@ -34,28 +35,15 @@ func TestSelectMetricShowsFields(t *testing.T) {
 
 	metricsPage := &MetricsPage{page: env.page}
 
-	// No selection, just check the default/pre-selected metric fields
 	title, err := metricsPage.GetTitleValue()
-	if err != nil {
-		t.Fatalf("could not get title value: %v", err)
-	}
-	if title == "" {
-		t.Errorf("expected title input to be present and non-empty")
-	}
+	require.NoError(t, err, "could not get title value")
+	require.NotEmpty(t, title, "expected title input to be present and non-empty")
 
 	unit, err := metricsPage.GetUnitValue()
-	if err != nil {
-		t.Fatalf("could not get unit value: %v", err)
-	}
-	if unit == "" {
-		t.Errorf("expected unit input to be present and non-empty")
-	}
+	require.NoError(t, err, "could not get unit value")
+	require.NotEmpty(t, unit, "expected unit input to be present and non-empty")
 
 	desc, err := metricsPage.GetDescriptionValue()
-	if err != nil {
-		t.Fatalf("could not get description value: %v", err)
-	}
-	if desc == "" {
-		t.Errorf("expected description textarea to be present and non-empty")
-	}
+	require.NoError(t, err, "could not get description value")
+	require.NotEmpty(t, desc, "expected description textarea to be present and non-empty")
 }
