@@ -29,7 +29,7 @@ func HomePage() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<html><head><title>Metrix2</title></head><body><h1>Metrix2</h1><p>Welcome to Metrix2! Track your metrics with ease.</p></body></html>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<html><head><title>Metrix2</title><link rel=\"stylesheet\" href=\"https://unpkg.com/@picocss/pico@2.0.6/css/pico.min.css\"></head><body><main class=\"container\"><h1>Metrix2</h1><p>Welcome to Metrix2! Track your metrics with ease.</p></main></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
