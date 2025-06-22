@@ -9,11 +9,29 @@ import (
 
 var pwa = playwright.NewPlaywrightAssertions()
 
+type MetricsPageObject struct {
+	page playwright.Page
+}
+
+func NewMetricsPageObject(page playwright.Page) *MetricsPageObject {
+	return &MetricsPageObject{page: page}
+}
+
+func (m *MetricsPageObject) SelectMetric(name string) error {
+	labels := []string{name}
+	_, err := m.page.GetByLabel("Select metric:").SelectOption(playwright.SelectOptionValues{Labels: &labels})
+	return err
+}
+
 func TestSelectMetricShowsFields(t *testing.T) {
 	env := setupTestEnv(t, "http://localhost:8080/metrics")
 	defer env.teardown()
 
-	err := pwa.Locator(env.page.GetByLabel("Title")).ToHaveValue("Weight")
+	metricsPage := NewMetricsPageObject(env.page)
+	err := metricsPage.SelectMetric("Weight")
+	assert.NoError(t, err, "failed to select metric 'Weight'")
+
+	err = pwa.Locator(env.page.GetByLabel("Title")).ToHaveValue("Weight")
 	assert.NoError(t, err, "expected title field to have value 'Weight'")
 
 	err = pwa.Locator(env.page.GetByLabel("Unit")).ToHaveValue("kg")
