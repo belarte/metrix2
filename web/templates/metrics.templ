@@ -1,21 +1,30 @@
 package templates
 
-// MetricsPage renders a hardcoded metric management page.
+import "github.com/belarte/metrix2/model"
+
 templ MetricsPage() {
-  @Layout() {
-    <form>
-      <label for="metric-select">Select metric:</label>
-      <select id="metric-select" name="metric">
-        <option value="weight" selected>Weight</option>
-        <option value="temperature">Temperature</option>
-        <option value="distance">Distance</option>
-      </select>
-      <label for="metric-title">Title</label>
-      <input id="metric-title" name="title" value="Weight" />
-      <label for="metric-unit">Unit</label>
-      <input id="metric-unit" name="unit" value="kg" />
-      <label for="metric-description">Description</label>
-      <textarea id="metric-description" name="description">Body weight in kilograms</textarea>
-    </form>
-  }
+    @Layout() {
+        <form>
+            @selectMetric()
+            @metricFormContent(model.Metrics[0])
+        </form>
+    }
+}
+
+templ selectMetric() {
+    <label for="metric-select">Select metric:</label>
+    <select id="metric-select" name="metric">
+    for _, metric := range model.Metrics {
+        <option value={metric.Title}>{metric.Title}</option>
+    }
+    </select>
+}
+
+templ metricFormContent(metric model.Metric) {
+    <label for="metric-title">Title</label>
+    <input id="metric-title" name="title" value={metric.Title} />
+    <label for="metric-unit">Unit</label>
+    <input id="metric-unit" name="unit" value={metric.Unit} />
+    <label for="metric-description">Description</label>
+    <textarea id="metric-description" name="description">{metric.Description}</textarea>
 }
