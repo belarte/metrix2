@@ -26,7 +26,6 @@ Create a web application for tracking user-defined metrics. Users can:
 
 - Start the server: `go run main.go serve`
 - Run all Go tests: `go test ./...`
-- Run Playwright E2E tests: `npx playwright test`
 
 ## Testing
 
@@ -41,7 +40,7 @@ Create a web application for tracking user-defined metrics. Users can:
 
 ## Contribution Guidelines
 
-- Keep PRs small and focused.
+- Keep commits small and focused.
 - Add new HTTP endpoints in `handlers/` and register them in `router/`.
 - Prefer pure functions and clear, simple code.
 - Follow code review and style guidelines.
