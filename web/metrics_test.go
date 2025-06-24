@@ -27,7 +27,6 @@ func (m *MetricsPageObject) SelectMetric(name string) *MetricsPageObject {
 }
 
 type metricTestCase struct {
-	name        string
 	title       string
 	unit        string
 	description string
@@ -35,9 +34,9 @@ type metricTestCase struct {
 
 func TestSelectMetricShowsFields(t *testing.T) {
 	testCases := []metricTestCase{
-		{"Weight", "Weight", "kg", "Body weight in kilograms"},
-		{"Steps", "Steps", "steps", "Daily step count"},
-		{"Calories", "Calories", "kcal", "Calories burned"},
+		{"Weight", "kg", "Body weight in kilograms"},
+		{"Steps", "steps", "Daily step count"},
+		{"Calories", "kcal", "Calories burned"},
 	}
 
 	env := setupTestEnv(t, "http://localhost:8080/metrics")
@@ -46,8 +45,8 @@ func TestSelectMetricShowsFields(t *testing.T) {
 	metricsPage := NewMetricsPageObject(env.page, t)
 
 	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			metricsPage.SelectMetric(tc.name)
+		t.Run(tc.title, func(t *testing.T) {
+			metricsPage.SelectMetric(tc.title)
 
 			err := pwa.Locator(env.page.GetByLabel("Title")).ToHaveValue(tc.title)
 			assert.NoError(t, err, "expected title field to have value '%s'", tc.title)
