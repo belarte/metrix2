@@ -6,21 +6,27 @@ templ MetricsPage() {
     @Layout() {
         <form>
             @selectMetric()
-            @metricFormContent(model.Metrics[0])
+            <div id="metric-form-fields">
+                @MetricFormContent(model.Metrics[0])
+            </div>
         </form>
     }
 }
 
 templ selectMetric() {
     <label for="metric-select">Select metric:</label>
-    <select id="metric-select" name="metric">
+    <select id="metric-select" name="metric"
+      hx-get="/metrics/form"
+      hx-target="#metric-form-fields"
+      hx-include="[name=metric]"
+      hx-trigger="change">
     for _, metric := range model.Metrics {
         <option value={metric.Title}>{metric.Title}</option>
     }
     </select>
 }
 
-templ metricFormContent(metric model.Metric) {
+templ MetricFormContent(metric model.Metric) {
     <label for="metric-title">Title</label>
     <input id="metric-title" name="title" value={metric.Title} />
     <label for="metric-unit">Unit</label>

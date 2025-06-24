@@ -16,6 +16,7 @@ func New() http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", handlers.Home)
 	mux.HandleFunc("/metrics", handlers.Metrics)
+	mux.HandleFunc("/metrics/form", handlers.MetricFormFields)
 	return mux
 }
 

@@ -29,7 +29,7 @@ func Layout() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<html><head><title>Metrix 2025</title><link rel=\"stylesheet\" href=\"https://unpkg.com/@picocss/pico@2.0.6/css/pico.min.css\"></head><body><header class=\"container\"><nav><ul><li><strong>Metrix2</strong></li></ul><ul><li><a href=\"/\">Home</a></li><li><a href=\"/metrics\">Metrics</a></li></ul></nav></header><main class=\"container\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<html><head><title>Metrix 2025</title><link rel=\"stylesheet\" href=\"https://unpkg.com/@picocss/pico@2.0.6/css/pico.min.css\"><script src=\"https://unpkg.com/htmx.org@1.9.12\"></script></head><body><header class=\"container\"><nav><ul><li><strong>Metrix2</strong></li></ul><ul><li><a href=\"/\">Home</a></li><li><a href=\"/metrics\">Metrics</a></li></ul></nav></header><main class=\"container\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

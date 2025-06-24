@@ -23,20 +23,37 @@ func (m *MetricsPageObject) SelectMetric(name string) error {
 	return err
 }
 
+type metricTestCase struct {
+	name        string
+	title       string
+	unit        string
+	description string
+}
+
 func TestSelectMetricShowsFields(t *testing.T) {
+	testCases := []metricTestCase{
+		{"Weight", "Weight", "kg", "Body weight in kilograms"},
+		{"Steps", "Steps", "steps", "Daily step count"},
+		{"Calories", "Calories", "kcal", "Calories burned"},
+	}
+
 	env := setupTestEnv(t, "http://localhost:8080/metrics")
 	defer env.teardown()
-
 	metricsPage := NewMetricsPageObject(env.page)
-	err := metricsPage.SelectMetric("Weight")
-	assert.NoError(t, err, "failed to select metric 'Weight'")
 
-	err = pwa.Locator(env.page.GetByLabel("Title")).ToHaveValue("Weight")
-	assert.NoError(t, err, "expected title field to have value 'Weight'")
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			err := metricsPage.SelectMetric(tc.name)
+			assert.NoError(t, err, "failed to select metric '%s'", tc.name)
 
-	err = pwa.Locator(env.page.GetByLabel("Unit")).ToHaveValue("kg")
-	assert.NoError(t, err, "expected unit field to have value 'kg'")
+			err = pwa.Locator(env.page.GetByLabel("Title")).ToHaveValue(tc.title)
+			assert.NoError(t, err, "expected title field to have value '%s'", tc.title)
 
-	err = pwa.Locator(env.page.GetByLabel("Description")).ToHaveValue("Body weight in kilograms")
-	assert.NoError(t, err, "expected description field to have correct value")
+			err = pwa.Locator(env.page.GetByLabel("Unit")).ToHaveValue(tc.unit)
+			assert.NoError(t, err, "expected unit field to have value '%s'", tc.unit)
+
+			err = pwa.Locator(env.page.GetByLabel("Description")).ToHaveValue(tc.description)
+			assert.NoError(t, err, "expected description field to have correct value '%s'", tc.description)
+		})
+	}
 }
