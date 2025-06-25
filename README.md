@@ -21,11 +21,11 @@ See [INSTRUCTIONS.md](INSTRUCTIONS.md) for details on the practices and patterns
 
 ## TODO
 
-- [ ] Add HTMX endpoints for dynamic updates
+- [x] Add HTMX endpoints for dynamic updates
 - [ ] Implement metric creation UI
 - [ ] Implement adding values to a given metric
-- [ ] Implement persistence layer
+- [ ] Update metric
 - [ ] Delete a metric
-- [ ] Add page to show stats of a given metric
 - [ ] Implement SQLite persistence layer
+- [ ] Add page to show stats of a given metric
 - [ ] Polish UI/UX
