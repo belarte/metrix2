@@ -17,12 +17,34 @@ func Metrics(w http.ResponseWriter, r *http.Request) {
 
 func MetricFormFields(w http.ResponseWriter, r *http.Request) {
 	name := r.URL.Query().Get("metric")
-	var metric model.Metric
-	for _, m := range model.Metrics {
+	if name == "__new__" {
+		templates.MetricFields(nil, true).Render(r.Context(), w)
+		return
+	}
+	var metric *model.Metric
+	for i, m := range model.Metrics {
 		if m.Title == name {
-			metric = m
+			metric = &model.Metrics[i]
 			break
 		}
 	}
-	templates.MetricFormContent(metric).Render(r.Context(), w)
+	templates.MetricFields(metric, false).Render(r.Context(), w)
+}
+
+func CreateMetric(w http.ResponseWriter, r *http.Request) {
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "Invalid form", http.StatusBadRequest)
+		return
+	}
+	title := r.FormValue("title")
+	unit := r.FormValue("unit")
+	description := r.FormValue("description")
+	if title == "" || unit == "" {
+		http.Error(w, "Title and Unit are required", http.StatusBadRequest)
+		return
+	}
+	newMetric := model.Metric{Title: title, Unit: unit, Description: description}
+	model.Metrics = append(model.Metrics, newMetric)
+	w.Header().Set("Content-Type", "text/html")
+	templates.MetricsForm(&newMetric).Render(r.Context(), w)
 }

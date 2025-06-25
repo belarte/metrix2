@@ -2,18 +2,28 @@ package templates
 
 import "github.com/belarte/metrix2/model"
 
+templ MetricsForm(selected *model.Metric) {
+    <form id="metric-form">
+        <div id="metric-select-container">
+            @SelectMetric(selected)
+        </div>
+        <div id="metric-form-fields">
+            @MetricFields(selected, selected == nil)
+        </div>
+    </form>
+}
+
 templ MetricsPage() {
     @Layout() {
-        <form>
-            @selectMetric()
-            <div id="metric-form-fields">
-                @MetricFormContent(model.Metrics[0])
-            </div>
-        </form>
+        if len(model.Metrics) > 0 {
+            @MetricsForm(&model.Metrics[0])
+        } else {
+            @MetricsForm(nil)
+        }
     }
 }
 
-templ selectMetric() {
+templ SelectMetric(selected *model.Metric) {
     <label for="metric-select">Select metric:</label>
     <select id="metric-select" name="metric"
       hx-get="/metrics/form"
@@ -21,16 +31,41 @@ templ selectMetric() {
       hx-include="[name=metric]"
       hx-trigger="change">
     for _, metric := range model.Metrics {
-        <option value={metric.Title}>{metric.Title}</option>
+        if selected != nil && selected.Title == metric.Title {
+            <option value={metric.Title} selected>{metric.Title}</option>
+        } else {
+            <option value={metric.Title}>{metric.Title}</option>
+        }
     }
+    <option value="__new__">+ New Metric</option>
     </select>
 }
 
-templ MetricFormContent(metric model.Metric) {
+templ MetricFields(metric *model.Metric, isCreate bool) {
     <label for="metric-title">Title</label>
-    <input id="metric-title" name="title" value={metric.Title} />
+    if metric != nil {
+        <input id="metric-title" name="title" aria-label="Metric title" value={metric.Title} required />
+    } else {
+        <input id="metric-title" name="title" aria-label="Metric title" required />
+    }
     <label for="metric-unit">Unit</label>
-    <input id="metric-unit" name="unit" value={metric.Unit} />
+    if metric != nil {
+        <input id="metric-unit" name="unit" aria-label="Metric unit" value={metric.Unit} required />
+    } else {
+        <input id="metric-unit" name="unit" aria-label="Metric unit" required />
+    }
     <label for="metric-description">Description</label>
-    <textarea id="metric-description" name="description">{metric.Description}</textarea>
+    if metric != nil {
+        <textarea id="metric-description" name="description" aria-label="Metric description">{metric.Description}</textarea>
+    } else {
+        <textarea id="metric-description" name="description" aria-label="Metric description"></textarea>
+    }
+    if isCreate {
+        <button hx-post="/metrics/create"
+                hx-target="#metric-form"
+                hx-swap="outerHTML"
+                aria-label="Create metric">
+            Create
+        </button>
+    }
 }

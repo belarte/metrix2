@@ -17,6 +17,7 @@ func New() http.Handler {
 	mux.HandleFunc("/", handlers.Home)
 	mux.HandleFunc("/metrics", handlers.Metrics)
 	mux.HandleFunc("/metrics/form", handlers.MetricFormFields)
+	mux.HandleFunc("/metrics/create", handlers.CreateMetric)
 	return mux
 }
 

@@ -22,7 +22,7 @@ See [INSTRUCTIONS.md](INSTRUCTIONS.md) for details on the practices and patterns
 ## TODO
 
 - [x] Add HTMX endpoints for dynamic updates
-- [ ] Implement metric creation UI
+- [x] Implement metric creation UI
 - [ ] Implement adding values to a given metric
 - [ ] Update metric
 - [ ] Delete a metric
