@@ -54,3 +54,39 @@ func CreateMetric(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	templates.MetricsForm(&newMetric).Render(r.Context(), w)
 }
+
+func Entries(w http.ResponseWriter, r *http.Request) {
+	var selected *model.Metric
+	if len(model.Metrics) > 0 {
+		selected = &model.Metrics[0]
+	}
+	var values []model.MetricValue
+	if selected != nil {
+		for _, v := range model.MetricValues {
+			if v.MetricID == selected.ID {
+				values = append(values, v)
+			}
+		}
+	}
+	templates.AddValuePage(selected, values).Render(r.Context(), w)
+}
+
+func EntriesValuesTable(w http.ResponseWriter, r *http.Request) {
+	idStr := r.URL.Query().Get("metric")
+	var selected *model.Metric
+	for i, m := range model.Metrics {
+		if fmt.Sprintf("%d", m.ID) == idStr {
+			selected = &model.Metrics[i]
+			break
+		}
+	}
+	var values []model.MetricValue
+	if selected != nil {
+		for _, v := range model.MetricValues {
+			if v.MetricID == selected.ID {
+				values = append(values, v)
+			}
+		}
+	}
+	templates.MetricValuesTable(values).Render(r.Context(), w)
+}

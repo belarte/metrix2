@@ -7,7 +7,7 @@ import (
 )
 
 func TestHomePage(t *testing.T) {
-	env := setupTestEnv(t, "http://localhost:8080")
+	env := setupTestEnv(t, "/")
 	defer env.teardown()
 
 	title, err := env.page.Title()

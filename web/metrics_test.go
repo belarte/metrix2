@@ -3,6 +3,7 @@ package web
 import (
 	"testing"
 
+	"github.com/belarte/metrix2/model"
 	"github.com/playwright-community/playwright-go"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -46,6 +47,18 @@ func (m *MetricsPageObject) ClickCreate() *MetricsPageObject {
 	return m
 }
 
+type AddValuesPageObject struct {
+	page playwright.Page
+	t    *testing.T
+}
+
+func (p *AddValuesPageObject) SelectMetric(name string) *AddValuesPageObject {
+	labels := []string{name}
+	_, err := p.page.GetByRole("combobox").SelectOption(playwright.SelectOptionValues{Labels: &labels})
+	require.NoError(p.t, err, "failed to select metric '%s'", name)
+	return p
+}
+
 type metricTestCase struct {
 	title       string
 	unit        string
@@ -59,7 +72,7 @@ func TestSelectMetricShowsFields(t *testing.T) {
 		{"Calories", "kcal", "Calories burned"},
 	}
 
-	env := setupTestEnv(t, "http://localhost:8080/metrics")
+	env := setupTestEnv(t, "/metrics")
 	defer env.teardown()
 
 	metricsPage := NewMetricsPageObject(env.page, t)
@@ -81,7 +94,8 @@ func TestSelectMetricShowsFields(t *testing.T) {
 }
 
 func TestCreateNewMetric(t *testing.T) {
-	env := setupTestEnv(t, "http://localhost:8080/metrics")
+	setupSampleMetricsAndValues()
+	env := setupTestEnv(t, "/metrics")
 	defer env.teardown()
 	metricsPage := NewMetricsPageObject(env.page, t)
 
@@ -104,4 +118,49 @@ func TestCreateNewMetric(t *testing.T) {
 	assert.NoError(t, err, "expected unit field to have value '%s'", newUnit)
 	err = pwa.Locator(env.page.GetByLabel("Description")).ToHaveValue(newDesc)
 	assert.NoError(t, err, "expected description field to have value '%s'", newDesc)
+}
+
+func setupSampleMetricsAndValues() {
+	model.Metrics = []model.Metric{
+		{ID: 1, Title: "Weight", Unit: "kg", Description: "Body weight in kilograms"},
+		{ID: 2, Title: "Steps", Unit: "steps", Description: "Daily step count"},
+		{ID: 3, Title: "Calories", Unit: "kcal", Description: "Calories burned"},
+	}
+	model.MetricValues = []model.MetricValue{
+		{ID: 1, MetricID: 1, Value: 70.5, Timestamp: 1719500000},
+		{ID: 2, MetricID: 1, Value: 71.0, Timestamp: 1719586400},
+		{ID: 3, MetricID: 2, Value: 10000, Timestamp: 1719500000},
+	}
+}
+
+func TestAddValuePageRendersDropdownAndTable(t *testing.T) {
+	setupSampleMetricsAndValues()
+	metrics := []struct {
+		name   string
+		values []string
+	}{
+		{"Weight", []string{"70.5", "71"}},
+		{"Steps", []string{"10000"}},
+		{"Calories", []string{}},
+	}
+
+	for _, metric := range metrics {
+		t.Run(metric.name, func(t *testing.T) {
+			env := setupTestEnv(t, "/entries")
+			defer env.teardown()
+
+			err := env.page.GetByText("Add Value to Metric").WaitFor()
+			require.NoError(t, err, "expected 'Add Value to Metric' text to be visible")
+
+			addValuesPage := &AddValuesPageObject{page: env.page, t: t}
+			addValuesPage.SelectMetric(metric.name)
+
+			for _, v := range metric.values {
+				row := env.page.Locator("table tr").Filter(playwright.LocatorFilterOptions{HasText: v})
+				visible, err := row.First().IsVisible()
+				assert.NoError(t, err, "expected to find value '%s' in table", v)
+				assert.True(t, visible, "expected value '%s' to be visible in table", v)
+			}
+		})
+	}
 }

@@ -1,0 +1,51 @@
+package templates
+
+import "github.com/belarte/metrix2/model"
+
+templ AddValuePage(selected *model.Metric, values []model.MetricValue) {
+    @Layout() {
+        <h2>Add Value to Metric</h2>
+        <div>
+            @MetricDropdown(selected)
+        </div>
+        <div id="metric-values-table">
+            @MetricValuesTable(values)
+        </div>
+    }
+}
+
+templ MetricDropdown(selected *model.Metric) {
+    <label for="add-value-metric-select">Select metric:</label>
+    <select id="add-value-metric-select" name="metric"
+      hx-get="/entries/values"
+      hx-target="#metric-values-table"
+      hx-trigger="change"
+      aria-label="Select metric">
+    for _, metric := range model.Metrics {
+        if selected != nil && selected.ID == metric.ID {
+            <option value={metric.ID} selected>{metric.Title}</option>
+        } else {
+            <option value={metric.ID}>{metric.Title}</option>
+        }
+    }
+    </select>
+}
+
+templ MetricValuesTable(values []model.MetricValue) {
+    <table>
+        <thead>
+            <tr>
+                <th>Value</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody>
+        for _, v := range values {
+            <tr>
+                <td>{v.Value}</td>
+                <td>{v.Timestamp}</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
