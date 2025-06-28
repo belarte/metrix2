@@ -135,15 +135,15 @@ func SelectMetric(selected *model.Metric) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		for _, metric := range model.Metrics {
-			if selected != nil && selected.Title == metric.Title {
+			if selected != nil && selected.ID == metric.ID {
 				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<option value=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var5 string
-				templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(metric.Title)
+				templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(metric.ID)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/metrics.templ`, Line: 35, Col: 39}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/metrics.templ`, Line: 35, Col: 36}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 				if templ_7745c5c3_Err != nil {
@@ -156,7 +156,7 @@ func SelectMetric(selected *model.Metric) templ.Component {
 				var templ_7745c5c3_Var6 string
 				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(metric.Title)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/metrics.templ`, Line: 35, Col: 63}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/metrics.templ`, Line: 35, Col: 60}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 				if templ_7745c5c3_Err != nil {
@@ -172,9 +172,9 @@ func SelectMetric(selected *model.Metric) templ.Component {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var7 string
-				templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(metric.Title)
+				templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(metric.ID)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/metrics.templ`, Line: 37, Col: 39}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/metrics.templ`, Line: 37, Col: 36}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 				if templ_7745c5c3_Err != nil {
@@ -187,7 +187,7 @@ func SelectMetric(selected *model.Metric) templ.Component {
 				var templ_7745c5c3_Var8 string
 				templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(metric.Title)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/metrics.templ`, Line: 37, Col: 54}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/metrics.templ`, Line: 37, Col: 51}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 				if templ_7745c5c3_Err != nil {

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/belarte/metrix2/model"
@@ -16,14 +17,14 @@ func Metrics(w http.ResponseWriter, r *http.Request) {
 }
 
 func MetricFormFields(w http.ResponseWriter, r *http.Request) {
-	name := r.URL.Query().Get("metric")
-	if name == "__new__" {
+	idStr := r.URL.Query().Get("metric")
+	if idStr == "__new__" {
 		templates.MetricFields(nil, true).Render(r.Context(), w)
 		return
 	}
 	var metric *model.Metric
 	for i, m := range model.Metrics {
-		if m.Title == name {
+		if fmt.Sprintf("%d", m.ID) == idStr {
 			metric = &model.Metrics[i]
 			break
 		}
@@ -43,7 +44,12 @@ func CreateMetric(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Title and Unit are required", http.StatusBadRequest)
 		return
 	}
-	newMetric := model.Metric{Title: title, Unit: unit, Description: description}
+
+	var nextID int64 = 1
+	if len(model.Metrics) > 0 {
+		nextID = model.Metrics[len(model.Metrics)-1].ID + 1
+	}
+	newMetric := model.Metric{ID: nextID, Title: title, Unit: unit, Description: description}
 	model.Metrics = append(model.Metrics, newMetric)
 	w.Header().Set("Content-Type", "text/html")
 	templates.MetricsForm(&newMetric).Render(r.Context(), w)

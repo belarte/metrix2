@@ -31,10 +31,10 @@ templ SelectMetric(selected *model.Metric) {
       hx-include="[name=metric]"
       hx-trigger="change">
     for _, metric := range model.Metrics {
-        if selected != nil && selected.Title == metric.Title {
-            <option value={metric.Title} selected>{metric.Title}</option>
+        if selected != nil && selected.ID == metric.ID {
+            <option value={metric.ID} selected>{metric.Title}</option>
         } else {
-            <option value={metric.Title}>{metric.Title}</option>
+            <option value={metric.ID}>{metric.Title}</option>
         }
     }
     <option value="__new__">+ New Metric</option>
