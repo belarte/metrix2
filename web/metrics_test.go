@@ -164,3 +164,32 @@ func TestAddValuePageRendersDropdownAndTable(t *testing.T) {
 		})
 	}
 }
+
+func TestAddValueForm_AddsValueAndShowsFeedback(t *testing.T) {
+	setupSampleMetricsAndValues()
+	env := setupTestEnv(t, "/entries")
+	defer env.teardown()
+
+	err := env.page.GetByText("Add Value to Metric").WaitFor()
+	require.NoError(t, err, "expected 'Add Value to Metric' text to be visible")
+
+	addValuesPage := &AddValuesPageObject{page: env.page, t: t}
+	addValuesPage.SelectMetric("Weight")
+
+	valueInput := env.page.GetByLabel("Value")
+	require.NoError(t, valueInput.Fill("72.3"), "failed to fill value input")
+	addBtn := env.page.GetByRole("button", playwright.PageGetByRoleOptions{Name: "Add Value"})
+	require.NoError(t, addBtn.Click(), "failed to click Add Value button")
+
+	err = env.page.GetByText("Success! Value added.").WaitFor()
+	assert.NoError(t, err, "expected success message after adding value")
+
+	row := env.page.Locator("table tr").Filter(playwright.LocatorFilterOptions{HasText: "72.3"})
+	visible, err := row.First().IsVisible()
+	assert.NoError(t, err, "expected to find new value in table")
+	assert.True(t, visible, "expected new value to be visible in table")
+
+	val, err := valueInput.InputValue()
+	assert.NoError(t, err)
+	assert.Equal(t, "", val, "expected value input to be cleared after submit")
+}

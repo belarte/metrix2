@@ -20,6 +20,7 @@ func New() http.Handler {
 	mux.HandleFunc("/metrics/create", handlers.CreateMetric)
 	mux.HandleFunc("/entries", handlers.Entries)
 	mux.HandleFunc("/entries/values", handlers.EntriesValuesTable)
+	mux.HandleFunc("/entries/add", handlers.AddEntry)
 	return mux
 }
 

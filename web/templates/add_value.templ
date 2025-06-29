@@ -8,9 +8,7 @@ templ AddValuePage(selected *model.Metric, values []model.MetricValue) {
         <div>
             @MetricDropdown(selected)
         </div>
-        <div id="metric-values-table">
-            @MetricValuesTable(values)
-        </div>
+        @AddValueFormAndTable(selected, values, "", "")
     }
 }
 
@@ -48,4 +46,31 @@ templ MetricValuesTable(values []model.MetricValue) {
         }
         </tbody>
     </table>
+}
+
+templ AddValueForm(selected *model.Metric) {
+    <form id="add-value-form"
+          hx-post="/entries/add"
+          hx-include="#add-value-metric-select"
+          hx-target="#add-value-form-and-table"
+          hx-swap="outerHTML">
+        <label for="add-value-value-input">Value:</label>
+        <input id="add-value-value-input" name="value" type="number" step="any" aria-label="Value" required />
+        if selected != nil {
+            <span>{selected.Unit}</span>
+        }
+        <button type="submit">Add Value</button>
+    </form>
+}
+
+templ AddValueFormAndTable(selected *model.Metric, values []model.MetricValue, feedback string, feedbackClass string) {
+    <div id="add-value-form-and-table">
+        @AddValueForm(selected)
+        if feedback != "" {
+            <div id="add-value-form-feedback" class={feedbackClass}>{feedback}</div>
+        }
+        <div id="metric-values-table">
+            @MetricValuesTable(values)
+        </div>
+    </div>
 }
