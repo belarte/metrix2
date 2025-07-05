@@ -46,3 +46,14 @@ func NextMetricID() int64 {
 	}
 	return Metrics[len(Metrics)-1].ID + 1
 }
+
+// MetricValuesByMetricID returns all MetricValues for a given metric ID.
+func MetricValuesByMetricID(metricID int64) []MetricValue {
+	var values []MetricValue
+	for _, v := range MetricValues {
+		if v.MetricID == metricID {
+			values = append(values, v)
+		}
+	}
+	return values
+}

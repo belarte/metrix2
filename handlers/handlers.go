@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -57,20 +56,13 @@ func Entries(w http.ResponseWriter, r *http.Request) {
 		selected = &model.Metrics[0]
 	}
 	if metricID := r.URL.Query().Get("metric"); metricID != "" {
-		for i, m := range model.Metrics {
-			if fmt.Sprintf("%d", m.ID) == metricID {
-				selected = &model.Metrics[i]
-				break
-			}
+		if id, err := strconv.ParseInt(metricID, 10, 64); err == nil {
+			selected = model.FindMetricByID(id)
 		}
 	}
 	var values []model.MetricValue
 	if selected != nil {
-		for _, v := range model.MetricValues {
-			if v.MetricID == selected.ID {
-				values = append(values, v)
-			}
-		}
+		values = model.MetricValuesByMetricID(selected.ID)
 	}
 	templates.AddValuePage(selected, values).Render(r.Context(), w)
 }
@@ -78,19 +70,12 @@ func Entries(w http.ResponseWriter, r *http.Request) {
 func EntriesValuesTable(w http.ResponseWriter, r *http.Request) {
 	idStr := r.URL.Query().Get("metric")
 	var selected *model.Metric
-	for i, m := range model.Metrics {
-		if fmt.Sprintf("%d", m.ID) == idStr {
-			selected = &model.Metrics[i]
-			break
-		}
+	if id, err := strconv.ParseInt(idStr, 10, 64); err == nil {
+		selected = model.FindMetricByID(id)
 	}
 	var values []model.MetricValue
 	if selected != nil {
-		for _, v := range model.MetricValues {
-			if v.MetricID == selected.ID {
-				values = append(values, v)
-			}
-		}
+		values = model.MetricValuesByMetricID(selected.ID)
 	}
 	templates.MetricValuesTable(values).Render(r.Context(), w)
 }
@@ -103,11 +88,8 @@ func AddEntry(w http.ResponseWriter, r *http.Request) {
 	metricID := r.FormValue("metric")
 	valueStr := r.FormValue("value")
 	var selected *model.Metric
-	for i, m := range model.Metrics {
-		if fmt.Sprintf("%d", m.ID) == metricID {
-			selected = &model.Metrics[i]
-			break
-		}
+	if id, err := strconv.ParseInt(metricID, 10, 64); err == nil {
+		selected = model.FindMetricByID(id)
 	}
 	feedback := ""
 	feedbackClass := ""
@@ -138,11 +120,7 @@ func AddEntry(w http.ResponseWriter, r *http.Request) {
 
 	var values []model.MetricValue
 	if selected != nil {
-		for _, v := range model.MetricValues {
-			if v.MetricID == selected.ID {
-				values = append(values, v)
-			}
-		}
+		values = model.MetricValuesByMetricID(selected.ID)
 	}
 	templates.AddValueFormAndTable(selected, values, feedback, feedbackClass).Render(r.Context(), w)
 }

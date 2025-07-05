@@ -54,3 +54,28 @@ func TestNextMetricID(t *testing.T) {
 		})
 	}
 }
+
+func TestMetricValuesByMetricID(t *testing.T) {
+	MetricValues = []MetricValue{
+		{ID: 1, MetricID: 1, Value: 10.0, Timestamp: 100},
+		{ID: 2, MetricID: 2, Value: 20.0, Timestamp: 200},
+		{ID: 3, MetricID: 1, Value: 15.0, Timestamp: 300},
+		{ID: 4, MetricID: 3, Value: 30.0, Timestamp: 400},
+	}
+	tests := []struct {
+		name     string
+		metricID int64
+		expected []MetricValue
+	}{
+		{"metric 1", 1, []MetricValue{{ID: 1, MetricID: 1, Value: 10.0, Timestamp: 100}, {ID: 3, MetricID: 1, Value: 15.0, Timestamp: 300}}},
+		{"metric 2", 2, []MetricValue{{ID: 2, MetricID: 2, Value: 20.0, Timestamp: 200}}},
+		{"metric 3", 3, []MetricValue{{ID: 4, MetricID: 3, Value: 30.0, Timestamp: 400}}},
+		{"no values", 999, nil},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := MetricValuesByMetricID(tt.metricID)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
