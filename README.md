@@ -23,7 +23,7 @@ See [INSTRUCTIONS.md](INSTRUCTIONS.md) for details on the practices and patterns
 
 - [x] Add HTMX endpoints for dynamic updates
 - [x] Implement metric creation UI
-- [ ] Implement adding values to a given metric
+- [x] Implement adding values to a given metric
 - [ ] Update metric
 - [ ] Delete a metric
 - [ ] Implement SQLite persistence layer
