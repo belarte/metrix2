@@ -28,3 +28,21 @@ var MetricValues = []MetricValue{
 	{ID: 5, MetricID: 2, Value: 9000, Timestamp: 1719672800},
 	{ID: 6, MetricID: 3, Value: 2200, Timestamp: 1719500000},
 }
+
+// FindMetricByID returns a pointer to the metric with the given ID, or nil if not found.
+func FindMetricByID(id int64) *Metric {
+	for i := range Metrics {
+		if Metrics[i].ID == id {
+			return &Metrics[i]
+		}
+	}
+	return nil
+}
+
+// NextMetricID returns the next available metric ID.
+func NextMetricID() int64 {
+	if len(Metrics) == 0 {
+		return 1
+	}
+	return Metrics[len(Metrics)-1].ID + 1
+}

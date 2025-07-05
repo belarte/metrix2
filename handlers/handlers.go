@@ -25,11 +25,8 @@ func MetricFormFields(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var metric *model.Metric
-	for i, m := range model.Metrics {
-		if fmt.Sprintf("%d", m.ID) == idStr {
-			metric = &model.Metrics[i]
-			break
-		}
+	if id, err := strconv.ParseInt(idStr, 10, 64); err == nil {
+		metric = model.FindMetricByID(id)
 	}
 	templates.MetricFields(metric, false).Render(r.Context(), w)
 }
@@ -47,10 +44,7 @@ func CreateMetric(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var nextID int64 = 1
-	if len(model.Metrics) > 0 {
-		nextID = model.Metrics[len(model.Metrics)-1].ID + 1
-	}
+	nextID := model.NextMetricID()
 	newMetric := model.Metric{ID: nextID, Title: title, Unit: unit, Description: description}
 	model.Metrics = append(model.Metrics, newMetric)
 	w.Header().Set("Content-Type", "text/html")
